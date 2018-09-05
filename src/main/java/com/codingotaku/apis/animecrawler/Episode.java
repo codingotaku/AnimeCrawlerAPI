@@ -2,6 +2,13 @@ package com.codingotaku.apis.animecrawler;
 
 public class Episode {
 	private String videoUrl = null;
+	private EpisodeData data = null;
+	Source source;
+
+	Episode(Source source, EpisodeData data) {
+		this.source = source;
+		this.data = data;
+	}
 
 	public String getVideoUrl() {
 		if (videoUrl == null) {
@@ -11,7 +18,14 @@ public class Episode {
 	}
 
 	public String regenerateVidoeUrl() {
-		// TODO generate video URL
-		return null;
+		return Server.generateVideoUrl(this);
+	}
+
+	public boolean hasNext() {
+		return data.next != null;
+	}
+
+	public boolean hasPrev() {
+		return data.prev != null;
 	}
 }

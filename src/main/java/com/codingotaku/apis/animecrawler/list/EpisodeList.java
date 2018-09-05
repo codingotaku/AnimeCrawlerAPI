@@ -18,9 +18,9 @@ public class EpisodeList {
 	public boolean hasNext() {
 		return hasNext;
 	}
-	
-	public List<Episode> getEpisodes(){
-		//TODO List out all episodes
+
+	public List<Episode> getEpisodes() {
+		// TODO List out all episodes
 		return null;
 	}
 }
