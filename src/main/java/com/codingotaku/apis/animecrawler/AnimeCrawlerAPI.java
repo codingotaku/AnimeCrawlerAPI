@@ -1,63 +1,43 @@
 package com.codingotaku.apis.animecrawler;
 
+import java.io.IOException;
+
 import com.codingotaku.apis.animecrawler.callbacks.AnimeFetchListener;
 import com.codingotaku.apis.animecrawler.callbacks.EpisodeListListener;
-import com.codingotaku.apis.animecrawler.list.AnimeList;
-import com.codingotaku.apis.animecrawler.list.EpisodeList;
 import com.google.common.base.Preconditions;
 
 public class AnimeCrawlerAPI {
-	public AnimeList listAnime(Source source) {
-		Preconditions.checkNotNull(source, "Source provided is null");
-		return Server.listAnime(source);
-	}
 
-	public AnimeList listAnime(Source source, int page) {
-		Preconditions.checkArgument(page >= 0, String.format("Invalid page number %d", page));
-		return Server.listAnime(source, page);
-	}
-
-	public void listAnime(Source source, AnimeFetchListener listener) {
+	public void listAllAnime(Source source, AnimeFetchListener listener) {
 		Preconditions.checkNotNull(source, "Source provided is null");
 		Preconditions.checkNotNull(listener, "Listener provided is null");
-		new Thread(() -> listener.loaded(Server.listAnime(source))).start();
+		Server.listAllAnime(source, listener);
 	}
 
-	public void listAnime(Source source, int page, AnimeFetchListener listener) {
+	public void listAnime(Source source, int page, AnimeFetchListener listener) throws IOException {
 		Preconditions.checkNotNull(source, "Source provided is null");
 		Preconditions.checkArgument(page >= 0, String.format("Invalid page number %d", page));
 		Preconditions.checkNotNull(listener, "Listener provided is null");
-		new Thread(() -> listener.loaded(Server.listAnime(source, page))).start();
+		Server.listAnime(source, page, listener);
 	}
 
-	public String getSynopsys(Anime anime) {
+	public String getSynopsys(Anime anime) throws IOException {
 		Preconditions.checkNotNull(anime, "Anime provided is null");
 		return Server.getSynopsys(anime);
 	}
 
-	public EpisodeList getEpisodeList(Anime anime) {
+	public void listAllEpisodes(Anime anime, EpisodeListListener listener) throws IOException {
 		Preconditions.checkNotNull(anime, "Anime provided is null");
-		return Server.getEpisodeList(anime);
+		Server.listAllEpisodes(anime, listener);
 	}
 
-	public EpisodeList getEpisodeList(Anime anime, int page) {
-		Preconditions.checkNotNull(anime, "Anime provided is null");
-		Preconditions.checkArgument(page >= 0, String.format("Invalid page number %d", page));
-		return Server.getEpisodeList(anime, page);
-	}
-
-	public void getEpisodeList(Anime anime, EpisodeListListener listener) {
-		Preconditions.checkNotNull(anime, "Anime provided is null");
-		new Thread(() -> listener.loaded(Server.getEpisodeList(anime))).start();
-	}
-
-	public void getEpisodeList(Anime anime, int page, EpisodeListListener listener) {
+	public void listEpisodes(Anime anime, int page, EpisodeListListener listener) throws IOException {
 		Preconditions.checkNotNull(anime, "Anime provided is null");
 		Preconditions.checkArgument(page >= 0, String.format("Invalid page number %d", page));
-		new Thread(() -> listener.loaded(Server.getEpisodeList(anime))).start();
+		Server.listEpisodes(anime, page, listener);
 	}
 
-	public String getPosterUrl(Anime anime) {
+	public String getPosterUrl(Anime anime) throws IOException {
 		Preconditions.checkNotNull(anime, "Anime provided is null");
 		return Server.getPosterUrl(anime);
 	}

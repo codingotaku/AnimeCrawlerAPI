@@ -1,31 +1,31 @@
 package com.codingotaku.apis.animecrawler;
 
+import java.io.IOException;
+
+import org.jsoup.nodes.Element;
+
 public class Episode {
 	private String videoUrl = null;
-	private EpisodeData data = null;
+	String episodeUrl;
+	String title;
 	Source source;
 
-	Episode(Source source, EpisodeData data) {
+	Episode(Source source, Element element) {
 		this.source = source;
-		this.data = data;
+		this.episodeUrl = element.attr("href");
+		this.title = element.text();
 	}
 
-	public String getVideoUrl() {
+	public String getTitle() {
+		return title;
+	}
+
+	public String getVideoUrl() throws IOException {
 		if (videoUrl == null) {
-			videoUrl = regenerateVidoeUrl();
+			videoUrl = Server.generateVideoUrl(this);
 		}
 		return videoUrl;
 	}
 
-	public String regenerateVidoeUrl() {
-		return Server.generateVideoUrl(this);
-	}
-
-	public boolean hasNext() {
-		return data.next != null;
-	}
-
-	public boolean hasPrev() {
-		return data.prev != null;
-	}
+	
 }
