@@ -148,4 +148,8 @@ class Server {
 		elements.forEach(element -> list.add(new Anime(source, element)));
 		return new AnimeList(source, Collections.unmodifiableList(list));
 	}
+
+	public static String getName(Anime anime) throws IOException {
+		return anime.getDoc().select(anime.source.nameRegex()).text();
+	}
 }

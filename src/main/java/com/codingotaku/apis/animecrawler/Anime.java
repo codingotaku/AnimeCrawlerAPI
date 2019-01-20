@@ -29,10 +29,6 @@ public class Anime {
 		return doc;
 	}
 
-	public String name() {
-		return name;
-	}
-
 	public String getSynopsys() throws IOException {
 		if (synopsys != null) return synopsys;
 		Preconditions.checkNotNull(this, "Anime provided is null");
@@ -54,5 +50,15 @@ public class Anime {
 		if (poster != null) return poster;
 		Preconditions.checkNotNull(this, "Anime provided is null");
 		return Server.getPosterUrl(this);
+	}
+
+	public String getName(){
+		if (name != null) return name;
+		Preconditions.checkNotNull(this, "Anime provided is null");
+		try {
+			return Server.getName(this);
+		} catch (IOException e) {
+			return "none";
+		}
 	}
 }

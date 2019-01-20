@@ -2,22 +2,32 @@ package com.codingotaku.apis.animecrawler;
 
 public class Source {
 	public static final Source Anime1;
-	public static final Source AnimeXD;
+	public static final Source Sub;
+	public static final Source Dub;
 	static {
 		Anime1 = new Source()
 				.setListUrl("http://www.anime1.com/content/list/")
 				.setListRegex("div.alph-list-box > h4:has(a[name]) + ul > li > a")
+				.setNameRegex("h1.blue-main-title")
 				.setDocRegex("div.detail-left > span > span:eq(3)")
 				.setPosterRegex("div.detail-cover >a >img")
 				.setEpRegex("div.left-left > ul.anime-list > li > a");
 
-		AnimeXD = new Source()
-				.setListUrl("http://www.animexd.me/home/anime-list")
-				.setListRegex("div.container-left > div.container-item:has(div.ci-title) > ul.arrow-list > li > a")
-				.setDocRegex("p.anime-details")
-				.setPosterRegex("div.animeDetail-image > img")
-				.setEpRegex("div.ci-contents > div.tnContent:nth-child(2) > ul > li > a")
-				.setEpRegexAlt("div.ci-contents > div.tnContent:nth-child(1) > ul > li > a");
+		Sub = new Source()
+				.setListUrl("https://www.thewatchcartoononline.tv/subbed-anime-list")
+				.setListRegex("div.ddmcc ul > li > a")
+				.setNameRegex("div.h1-tag > a")
+				.setDocRegex("div#sidebar_cat > p")
+				.setPosterRegex("div#sidebar_cat > img")
+				.setEpRegex("div.cat-eps > a");
+		
+		Dub = new Source()
+				.setListUrl("https://www.thewatchcartoononline.tv/dubbed-anime-list")
+				.setListRegex("div.ddmcc ul > li > a")
+				.setNameRegex("div.h1-tag > a")
+				.setDocRegex("div#sidebar_cat > p")
+				.setPosterRegex("div#sidebar_cat > img")
+				.setEpRegex("div.cat-eps > a");
 	}
 
 	private String docRegex;
@@ -27,7 +37,7 @@ public class Source {
 	private String listUrl;
 	private String posterRegex;
 	private String vidRegex;
-	private String name;
+	private String nameRegex;
 	private boolean multiPage;
 	private boolean multiEpList;
 	private PageNav pagePattern;
@@ -71,7 +81,10 @@ public class Source {
 	String vidRegex() {
 		return vidRegex;
 	}
-
+	
+	String nameRegex() {
+		return this.nameRegex;
+	}
 	boolean isMultiPage() {
 		return multiPage;
 	}
@@ -125,10 +138,11 @@ public class Source {
 		return this;
 	}
 
-	public String name() {
-		return this.name;
+	private Source setNameRegex(String nameRegex) {
+		this.nameRegex = nameRegex;
+		return this;
 	}
-
+	
 	private Source setPageNav(PageNav pattenrs) {
 		this.pagePattern = pattenrs;
 		return this;
