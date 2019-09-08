@@ -8,13 +8,13 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import com.codingotaku.apis.animecrawler.callbacks.EpisodeListListener;
+import com.codingotaku.apis.animecrawler.callbacks.SynopsysListener;
 import com.google.common.base.Preconditions;
 
 public class Anime {
 	String url;
 	Source source;
 	Document doc = null;
-	private String synopsys = null;
 	private String poster = null;
 	private String name;
 
@@ -25,35 +25,37 @@ public class Anime {
 	}
 
 	Document getDoc() throws IOException {
-		if (doc == null) doc = Jsoup.parse(new URL(url), 60000);
+		if (doc == null)
+			doc = Jsoup.parse(new URL(url), 60000);
 		return doc;
 	}
 
-	public String getSynopsys() throws IOException {
-		if (synopsys != null) return synopsys;
+	public void getSynopsys(SynopsysListener listener) throws IOException {
 		Preconditions.checkNotNull(this, "Anime provided is null");
-		return Server.getSynopsys(this);
+		Server.getSynopsys(this, listener);
 	}
 
-	public void listAllEpisodes(EpisodeListListener listener){
+	public void listAllEpisodes(EpisodeListListener listener) {
 		Preconditions.checkNotNull(this, "Anime provided is null");
 		Server.listAllEpisodes(this, listener);
 	}
-	
-	public void listEpisodes(int page, EpisodeListListener listener){
+
+	public void listEpisodes(int page, EpisodeListListener listener) {
 		Preconditions.checkNotNull(this, "Anime provided is null");
 		Preconditions.checkArgument(page >= 0, String.format("Invalid page number %d", page));
 		Server.listEpisodes(this, page, listener);
 	}
 
 	public String getPosterUrl() throws IOException {
-		if (poster != null) return poster;
+		if (poster != null)
+			return poster;
 		Preconditions.checkNotNull(this, "Anime provided is null");
 		return Server.getPosterUrl(this);
 	}
 
-	public String getName(){
-		if (name != null) return name;
+	public String getName() {
+		if (name != null)
+			return name;
 		Preconditions.checkNotNull(this, "Anime provided is null");
 		try {
 			return Server.getName(this);

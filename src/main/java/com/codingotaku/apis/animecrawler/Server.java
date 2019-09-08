@@ -15,6 +15,7 @@ import org.jsoup.select.Elements;
 
 import com.codingotaku.apis.animecrawler.callbacks.AnimeFetchListener;
 import com.codingotaku.apis.animecrawler.callbacks.EpisodeListListener;
+import com.codingotaku.apis.animecrawler.callbacks.SynopsysListener;
 import com.codingotaku.apis.animecrawler.exception.NoSuchListException;
 
 class Server {
@@ -42,9 +43,12 @@ class Server {
 		}
 	}
 
-	static String getSynopsys(Anime anime) throws IOException {
-		String synopsys = anime.getDoc().select(anime.source.docRegex()).text();
-		return synopsys;
+	static void getSynopsys(Anime anime, SynopsysListener listener) {
+		try {
+			listener.loaded(anime.getDoc().select(anime.source.docRegex()).text(), new Result());
+		} catch (IOException e) {
+			listener.loaded(null, new Result(e));
+		}
 	}
 
 	static void listAllEpisodes(Anime anime, EpisodeListListener listener) {
@@ -67,7 +71,8 @@ class Server {
 					int currentId = Integer.parseInt(current.text());
 					int lastId;
 					Element last = doc.selectFirst(pageNav.last);
-					if (last == null) last = doc.select(pageNav.lastAltr).last();
+					if (last == null)
+						last = doc.select(pageNav.lastAltr).last();
 					if (last == null || current.text().equals(last.text())) {
 						// Give up, Can't find more pages
 						listener.loaded(generateEpList(source, elements), new Result());
@@ -110,7 +115,8 @@ class Server {
 					if (elements.isEmpty() && source.epRegexAlt() != null) {
 						elements = doc.select(source.epRegexAlt());
 					}
-					if (elements.isEmpty()) listener.loaded(null, new Result(new NoSuchListException(anime, page)));
+					if (elements.isEmpty())
+						listener.loaded(null, new Result(new NoSuchListException(anime, page)));
 					elements.forEach(element -> episodes.add(new Episode(source, element)));
 					listener.loaded(new EpisodeList(1, 1, episodes), new Result());
 				} else if (page == 0) {
@@ -133,7 +139,8 @@ class Server {
 		System.out.println(doc.toString());
 		Pattern pattern = Pattern.compile(episode.source.vidRegex());
 		Matcher matcher = pattern.matcher(doc.data());
-		if (matcher.find()) return matcher.group();
+		if (matcher.find())
+			return matcher.group();
 		return null;
 	}
 
