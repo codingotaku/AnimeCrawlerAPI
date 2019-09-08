@@ -14,6 +14,9 @@ public class Episode {
 		this.source = source;
 		this.episodeUrl = element.attr("href");
 		this.title = element.text();
+		if (source.isAppendDomain()) {
+			this.episodeUrl = source.getDomain() + episodeUrl;
+		}
 	}
 
 	public String getTitle() {

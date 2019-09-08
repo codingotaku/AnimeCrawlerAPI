@@ -4,6 +4,5 @@ module anime_crawler_api {
 	exports com.codingotaku.apis.animecrawler.helpers;
 	exports com.codingotaku.apis.animecrawler.callbacks;
 
-	requires com.google.common;
 	requires org.jsoup;
 }

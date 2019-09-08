@@ -13,6 +13,8 @@ public class Source {
 		private boolean multiPage;
 		private boolean multiEpList;
 		private PageNav pagePattern;
+		private boolean appendDomain;
+		private String domain;
 
 		public SourceBuilder() {
 			vidRegex = "(http[s]?:\\/\\/[^\\/]*.*.mp4\\\\??[^\\\"\\']*)";
@@ -77,19 +79,27 @@ public class Source {
 			return this;
 		}
 
+		public SourceBuilder setDomain(String domain) {
+			this.appendDomain = true;
+			this.domain = domain;
+			return this;
+		}
+
 		public Source build() {
 			Source source = new Source();
-			source.docRegex		= this.docRegex;
-			source.epRegex		= this.epRegex;
-			source.epRegexAlt	= this.epRegexAlt;
-			source.listRegex	= this.listRegex;
-			source.listUrl		= this.listUrl;
-			source.posterRegex	= this.posterRegex;
-			source.vidRegex		= this.vidRegex;
-			source.nameRegex	= this.nameRegex;
-			source.multiPage	= this.multiPage;
-			source.multiEpList	= this.multiEpList;
-			source.pagePattern	= this.pagePattern;
+			source.docRegex = this.docRegex;
+			source.epRegex = this.epRegex;
+			source.epRegexAlt = this.epRegexAlt;
+			source.listRegex = this.listRegex;
+			source.listUrl = this.listUrl;
+			source.posterRegex = this.posterRegex;
+			source.vidRegex = this.vidRegex;
+			source.nameRegex = this.nameRegex;
+			source.multiPage = this.multiPage;
+			source.multiEpList = this.multiEpList;
+			source.pagePattern = this.pagePattern;
+			source.appendDomain = this.appendDomain;
+			source.domain = this.domain;
 			return source;
 		}
 
@@ -106,6 +116,8 @@ public class Source {
 	private boolean multiPage;
 	private boolean multiEpList;
 	private PageNav pagePattern;
+	private boolean appendDomain;
+	private String domain;
 
 	public Source() {
 		vidRegex = "(http[s]?:\\/\\/[^\\/]*.*.mp4\\\\??[^\\\"\\']*)";
@@ -157,5 +169,13 @@ public class Source {
 
 	public boolean isMultiEpList() {
 		return multiEpList;
+	}
+
+	public boolean isAppendDomain() {
+		return appendDomain;
+	}
+
+	public String getDomain() {
+		return domain;
 	}
 }

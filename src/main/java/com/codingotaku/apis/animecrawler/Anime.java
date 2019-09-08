@@ -1,7 +1,6 @@
 package com.codingotaku.apis.animecrawler;
 
 import java.io.IOException;
-import java.net.URL;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -10,7 +9,7 @@ import org.jsoup.nodes.Element;
 import com.codingotaku.apis.animecrawler.callbacks.EpisodeListListener;
 import com.codingotaku.apis.animecrawler.callbacks.PosterListener;
 import com.codingotaku.apis.animecrawler.callbacks.SynopsysListener;
-import com.google.common.base.Preconditions;
+import com.codingotaku.apis.animecrawler.helpers.Preconditions;
 
 public class Anime {
 	String url;
@@ -22,11 +21,15 @@ public class Anime {
 		this.source = source;
 		name = element.text();
 		url = element.attr("href");
+		if (source.isAppendDomain()) {
+			url = source.getDomain() + url;
+		}
 	}
 
 	Document getDoc() throws IOException {
 		if (doc == null)
-			doc = Jsoup.parse(new URL(url), 60000);
+			doc = Jsoup.connect(url).get();
+//			doc = Jsoup.parse(new URL(url), 60000);
 		return doc;
 	}
 

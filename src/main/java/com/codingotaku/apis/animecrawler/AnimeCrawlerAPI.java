@@ -4,7 +4,8 @@ import com.codingotaku.apis.animecrawler.callbacks.AnimeFetchListener;
 import com.codingotaku.apis.animecrawler.callbacks.EpisodeListListener;
 import com.codingotaku.apis.animecrawler.callbacks.PosterListener;
 import com.codingotaku.apis.animecrawler.callbacks.SynopsysListener;
-import com.google.common.base.Preconditions;
+import com.codingotaku.apis.animecrawler.helpers.Preconditions;
+
 
 public class AnimeCrawlerAPI {
 
