@@ -141,7 +141,6 @@ class Server {
 
 	static String generateVideoUrl(Episode episode) throws IOException {
 		Document doc = Jsoup.parse(new URL(episode.episodeUrl), 60000);
-		System.out.println(doc.toString());
 		Pattern pattern = Pattern.compile(episode.source.vidRegex());
 		Matcher matcher = pattern.matcher(doc.data());
 		if (matcher.find())
