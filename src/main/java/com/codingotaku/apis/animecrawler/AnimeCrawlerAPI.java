@@ -1,9 +1,8 @@
 package com.codingotaku.apis.animecrawler;
 
-import java.io.IOException;
-
 import com.codingotaku.apis.animecrawler.callbacks.AnimeFetchListener;
 import com.codingotaku.apis.animecrawler.callbacks.EpisodeListListener;
+import com.codingotaku.apis.animecrawler.callbacks.PosterListener;
 import com.codingotaku.apis.animecrawler.callbacks.SynopsysListener;
 import com.google.common.base.Preconditions;
 
@@ -38,8 +37,8 @@ public class AnimeCrawlerAPI {
 		Server.listEpisodes(anime, page, listener);
 	}
 
-	public String getPosterUrl(Anime anime) throws IOException {
+	public void getPosterUrl(Anime anime, PosterListener listener){
 		Preconditions.checkNotNull(anime, "Anime provided is null");
-		return Server.getPosterUrl(anime);
+		Server.getPosterUrl(anime, listener);
 	}
 }

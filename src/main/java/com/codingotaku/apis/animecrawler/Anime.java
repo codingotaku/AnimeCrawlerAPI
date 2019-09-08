@@ -8,6 +8,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import com.codingotaku.apis.animecrawler.callbacks.EpisodeListListener;
+import com.codingotaku.apis.animecrawler.callbacks.PosterListener;
 import com.codingotaku.apis.animecrawler.callbacks.SynopsysListener;
 import com.google.common.base.Preconditions;
 
@@ -15,7 +16,6 @@ public class Anime {
 	String url;
 	Source source;
 	Document doc = null;
-	private String poster = null;
 	private String name;
 
 	Anime(Source source, Element element) {
@@ -46,11 +46,9 @@ public class Anime {
 		Server.listEpisodes(this, page, listener);
 	}
 
-	public String getPosterUrl() throws IOException {
-		if (poster != null)
-			return poster;
+	public void getPosterUrl(PosterListener listener) throws IOException {
 		Preconditions.checkNotNull(this, "Anime provided is null");
-		return Server.getPosterUrl(this);
+		Server.getPosterUrl(this, listener);
 	}
 
 	public String getName() {
@@ -62,5 +60,10 @@ public class Anime {
 		} catch (IOException e) {
 			return "none";
 		}
+	}
+
+	@Override
+	public String toString() {
+		return this.getName();
 	}
 }

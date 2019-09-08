@@ -27,5 +27,9 @@ public class Episode {
 		return videoUrl;
 	}
 
-	
+	@Override
+	public String toString() {
+		return this.getTitle();
+	}
+
 }

@@ -15,6 +15,7 @@ import org.jsoup.select.Elements;
 
 import com.codingotaku.apis.animecrawler.callbacks.AnimeFetchListener;
 import com.codingotaku.apis.animecrawler.callbacks.EpisodeListListener;
+import com.codingotaku.apis.animecrawler.callbacks.PosterListener;
 import com.codingotaku.apis.animecrawler.callbacks.SynopsysListener;
 import com.codingotaku.apis.animecrawler.exception.NoSuchListException;
 
@@ -130,8 +131,12 @@ class Server {
 		}).start();
 	}
 
-	static String getPosterUrl(Anime anime) throws IOException {
-		return anime.getDoc().select(anime.source.posterRegex()).first().attr("src");
+	static void getPosterUrl(Anime anime, PosterListener listener) {
+		try {
+			listener.loaded(anime.getDoc().select(anime.source.posterRegex()).first().attr("src"), new Result());
+		} catch (IOException e) {
+			listener.loaded(null, new Result(e));
+		}
 	}
 
 	static String generateVideoUrl(Episode episode) throws IOException {
