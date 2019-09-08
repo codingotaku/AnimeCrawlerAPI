@@ -1,5 +1,16 @@
 # AnimeCrawlerAPI
-A java based Anime crawler API with multiple server support<br/>
-Curently the API is in development.<br/>
-Currently supports AnimeXD, Anime1 servers!<br/>
+A java based Anime crawler API with multiple server support. 
+
+Currently the API is under development 
+
+For Maven, use
+
+```xml 
+<dependency>
+	<groupId>com.codingotaku.api</groupId>
+	<artifactId>anime-crawler-api</artifactId>
+	<version>0.1-alpha</version>
+</dependency>
+```
+
 JavaDoc coming soon!
