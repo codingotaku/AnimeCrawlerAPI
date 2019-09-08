@@ -8,8 +8,8 @@
 	<name>AnimeCrawlerAPI</name>
 	<description>Anime crawler API with multiple server support</description>
 	<properties>
-		<maven.compiler.source>7</maven.compiler.source>
-		<maven.compiler.target>7</maven.compiler.target>
+		<maven.compiler.source>9</maven.compiler.source>
+		<maven.compiler.target>9</maven.compiler.target>
 	</properties>
 	<dependencies>
 		<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->

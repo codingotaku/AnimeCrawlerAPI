@@ -9,7 +9,7 @@ For Maven, use
 <dependency>
 	<groupId>com.codingotaku.api</groupId>
 	<artifactId>anime-crawler-api</artifactId>
-	<version>0.1-alpha</version>
+	<version>0.1</version>
 </dependency>
 ```
 
