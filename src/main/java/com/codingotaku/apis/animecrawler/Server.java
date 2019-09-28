@@ -71,7 +71,7 @@ class Server {
 					String pageUrl = anime.url;
 					Element current = doc.selectFirst(pageNav.current);
 					if (current == null) {
-						listener.loaded(generateEpList(source, elements), new Result());
+						listener.loaded(generateEpList(anime, source, elements), new Result());
 						return;
 					}
 					int currentId = Integer.parseInt(current.text());
@@ -81,7 +81,7 @@ class Server {
 						last = doc.select(pageNav.lastAltr).last();
 					if (last == null || current.text().equals(last.text())) {
 						// Give up, Can't find more pages
-						listener.loaded(generateEpList(source, elements), new Result());
+						listener.loaded(generateEpList(anime, source, elements), new Result());
 						return;
 					} else {
 //						Document tmp = Jsoup.parse(new URL(last.attr("href")), 60000);
@@ -98,11 +98,11 @@ class Server {
 						if (elements.isEmpty() && source.epRegexAlt() != null) {
 							elements = doc.select(source.epRegexAlt());
 						}
-						elements.forEach(element -> episodes.add(new Episode(source, element)));
+						elements.forEach(element -> episodes.add(new Episode(anime.getName(), source, element)));
 					}
 					listener.loaded(new EpisodeList(1, 1, episodes), new Result());
 				} else {
-					listener.loaded(generateEpList(source, elements), new Result());
+					listener.loaded(generateEpList(anime, source, elements), new Result());
 				}
 			} catch (IOException e) {
 				listener.loaded(null, new Result(e));
@@ -126,7 +126,7 @@ class Server {
 					}
 					if (elements.isEmpty())
 						listener.loaded(null, new Result(new NoSuchListException(anime, page)));
-					elements.forEach(element -> episodes.add(new Episode(source, element)));
+					elements.forEach(element -> episodes.add(new Episode(anime.getName(), source, element)));
 					listener.loaded(new EpisodeList(1, 1, episodes), new Result());
 				} else if (page == 0) {
 					listAllEpisodes(anime, listener);
@@ -157,9 +157,9 @@ class Server {
 		return null;
 	}
 
-	private static EpisodeList generateEpList(Source source, Elements elements) {
+	private static EpisodeList generateEpList(Anime anime, Source source, Elements elements) {
 		List<Episode> episodes = new ArrayList<>();
-		elements.forEach(element -> episodes.add(new Episode(source, element)));
+		elements.forEach(element -> episodes.add(new Episode(anime.getName(), source, element)));
 		return new EpisodeList(1, 1, Collections.unmodifiableList(episodes));
 	}
 

@@ -7,10 +7,12 @@ import org.jsoup.nodes.Element;
 public class Episode {
 	private String videoUrl = null;
 	String episodeUrl;
-	String title;
-	Source source;
+	final String title;
+	final String animeName;
+	final Source source;
 
-	Episode(Source source, Element element) {
+	Episode(String animeName,Source source, Element element) {
+		this.animeName = animeName;
 		this.source = source;
 		this.episodeUrl = element.attr("href");
 		this.title = element.text();
@@ -21,6 +23,10 @@ public class Episode {
 
 	public String getTitle() {
 		return title;
+	}
+	
+	public String getanimeName(){
+		return animeName;
 	}
 
 	public String getVideoUrl() throws IOException {
