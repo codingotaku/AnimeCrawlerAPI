@@ -1,6 +1,6 @@
 package com.codingotaku.apis.animecrawler;
 
-class PageNav {
+public class PageNav {
 	final String pageRegex;
 	final String pageFormat;
 	final String first;
@@ -17,7 +17,7 @@ class PageNav {
 		this.lastAltr = builder.lastAltr;
 	};
 
-	static class Builder {
+	public static class Builder {
 		String pageRegex;
 		String pageFormat;
 		String first;
@@ -25,37 +25,37 @@ class PageNav {
 		String last;
 		String lastAltr;
 
-		Builder setPageRegex(String regex) {
+		public Builder setPageRegex(String regex) {
 			this.pageRegex = regex;
 			return this;
 		}
 
-		Builder setPageFormat(String stringFormat) {
+		public Builder setPageFormat(String stringFormat) {
 			this.pageFormat = stringFormat;
 			return this;
 		}
 
-		Builder setFirst(String xPath) {
+		public Builder setFirst(String xPath) {
 			this.first = xPath;
 			return this;
 		}
 
-		Builder setLast(String xPath) {
+		public Builder setLast(String xPath) {
 			this.last = xPath;
 			return this;
 		}
 
-		Builder setLastAltr(String xPath) {
+		public Builder setLastAltr(String xPath) {
 			this.lastAltr = xPath;
 			return this;
 		}
 
-		Builder setCurrent(String xPath) {
+		public Builder setCurrent(String xPath) {
 			this.current = xPath;
 			return this;
 		}
 
-		PageNav build() {
+		public PageNav build() {
 			return new PageNav(this);
 		}
 	}
