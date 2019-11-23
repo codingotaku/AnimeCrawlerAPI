@@ -1,6 +1,9 @@
 package com.codingotaku.apis.animecrawler.helpers;
 
 public final class Preconditions {
+	private Preconditions(){
+		
+	}
 	public static void checkNotNull(Object ob, String message) {
 		if (ob == null) {
 			throw new NullPointerException(message);

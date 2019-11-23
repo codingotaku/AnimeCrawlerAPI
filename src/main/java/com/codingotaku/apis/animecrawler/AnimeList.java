@@ -1,6 +1,5 @@
 package com.codingotaku.apis.animecrawler;
 
-import java.io.IOException;
 import java.util.List;
 
 import com.codingotaku.apis.animecrawler.callbacks.AnimeFetchListener;
@@ -17,7 +16,7 @@ public class AnimeList {
 		this.source = source;
 	}
 
-	public void getNextPage(AnimeFetchListener listener) throws IOException {
+	public void getNextPage(AnimeFetchListener listener) {
 		Server.listAnime(source, page + 1, listener);
 	}
 

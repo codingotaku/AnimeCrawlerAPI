@@ -15,16 +15,18 @@ import org.jsoup.select.Elements;
 import com.codingotaku.apis.animecrawler.callbacks.AnimeFetchListener;
 import com.codingotaku.apis.animecrawler.callbacks.EpisodeListListener;
 import com.codingotaku.apis.animecrawler.callbacks.PosterListener;
-import com.codingotaku.apis.animecrawler.callbacks.SynopsysListener;
+import com.codingotaku.apis.animecrawler.callbacks.SynopsisListener;
 import com.codingotaku.apis.animecrawler.exception.NoSuchListException;
 
 class Server {
+	private Server(){
+		
+	}
 	static void listAllAnime(Source source, AnimeFetchListener listener) {
 		new Thread(() -> {
 			try {
-				Document doc = Jsoup.connect(source.listUrl()).get();
-//				Document doc = Jsoup.parse(new URL(source.listUrl()), 60000);
-				Elements elements = doc.select(source.listRegex());
+				Document doc = Jsoup.connect(source.getListUrl()).get();
+				Elements elements = doc.select(source.getListRegex());
 				listener.loaded(generateAnimeList(source, elements), new Result());
 			} catch (IOException e) {
 				listener.loaded(null, new Result(e));
@@ -39,15 +41,14 @@ class Server {
 		} else if (page == 0) {
 			listAllAnime(source, listener);
 		} else {
-			// TODO Throw exception
 			listener.loaded(null, new Result(new NoSuchListException(page)));
 		}
 	}
 
-	static void getSynopsys(Anime anime, SynopsysListener listener) {
+	static void getSynopsis(Anime anime, SynopsisListener listener) {
 		try {
 			boolean append = anime.source.isAppendDomain();
-			String url = anime.getDoc().select(anime.source.docRegex()).text();
+			String url = anime.getDoc().select(anime.source.getDocRegex()).text();
 			if (append) {
 				url = anime.source.getDomain() + url;
 			}
@@ -57,17 +58,29 @@ class Server {
 		}
 	}
 
+	private static Elements getEpElements(Document doc, Source source) {
+		Elements elements = doc.select(source.getEpRegex());
+		if (elements.isEmpty() && source.getEpRegexAlt() != null) {
+			elements = doc.select(source.getEpRegexAlt());
+		}
+		return elements;
+	}
+
+	private static Element getEpLastPage(Document doc, PageNav pageNav) {
+		Element last = doc.selectFirst(pageNav.last);
+		if (last == null)
+			last = doc.select(pageNav.lastAltr).last();
+		return last;
+	}
+
 	static void listAllEpisodes(Anime anime, EpisodeListListener listener) {
 		new Thread(() -> {
 			try {
 				Source source = anime.source;
 				Document doc = anime.getDoc();
-				Elements elements = doc.select(source.epRegex());
-				if (elements.isEmpty() && source.epRegexAlt() != null) {
-					elements = doc.select(source.epRegexAlt());
-				}
+				Elements elements = getEpElements(doc, source);
 				if (source.isMultiEpList()) {
-					PageNav pageNav = source.pageNav();
+					PageNav pageNav = source.getPageNav();
 					String pageUrl = anime.url;
 					Element current = doc.selectFirst(pageNav.current);
 					if (current == null) {
@@ -76,28 +89,21 @@ class Server {
 					}
 					int currentId = Integer.parseInt(current.text());
 					int lastId;
-					Element last = doc.selectFirst(pageNav.last);
-					if (last == null)
-						last = doc.select(pageNav.lastAltr).last();
+					Element last = getEpLastPage(doc, pageNav);
 					if (last == null || current.text().equals(last.text())) {
 						// Give up, Can't find more pages
 						listener.loaded(generateEpList(anime, source, elements), new Result());
 						return;
-					} else {
-//						Document tmp = Jsoup.parse(new URL(last.attr("href")), 60000);
-						Document tmp = Jsoup.connect(last.attr("href")).get();
-						String txt = tmp.selectFirst(pageNav.current).text();
-						lastId = Integer.parseInt(txt);
 					}
+
+					Document tmp = Jsoup.connect(last.attr("href")).get();
+					String txt = tmp.selectFirst(pageNav.current).text();
+					lastId = Integer.parseInt(txt);
 
 					List<Episode> episodes = new ArrayList<>();
 					for (int i = currentId; i <= lastId; i++) {
-//						doc = Jsoup.parse(new URL(pageUrl + String.format(pageNav.pageFormat, i)), 60000);
 						doc = Jsoup.connect(pageUrl + String.format(pageNav.pageFormat, i)).get();
-						elements = doc.select(source.epRegex());
-						if (elements.isEmpty() && source.epRegexAlt() != null) {
-							elements = doc.select(source.epRegexAlt());
-						}
+						elements = getEpElements(doc, source);
 						elements.forEach(element -> episodes.add(new Episode(anime.getName(), source, element)));
 					}
 					listener.loaded(new EpisodeList(1, 1, episodes), new Result());
@@ -116,13 +122,11 @@ class Server {
 			try {
 				Source source = anime.source;
 				if (source.isMultiEpList()) {
-//					Document doc = Jsoup.parse(new URL(anime.url + String.format(source.pageNav().pageFormat, page)),
-//							60000);
-					Document doc = Jsoup.connect(anime.url + String.format(source.pageNav().pageFormat, page)).get();
+					Document doc = Jsoup.connect(anime.url + String.format(source.getPageNav().pageFormat, page)).get();
 					List<Episode> episodes = new ArrayList<>();
-					Elements elements = doc.select(source.epRegex());
-					if (elements.isEmpty() && source.epRegexAlt() != null) {
-						elements = doc.select(source.epRegexAlt());
+					Elements elements = doc.select(source.getEpRegex());
+					if (elements.isEmpty() && source.getEpRegexAlt() != null) {
+						elements = doc.select(source.getEpRegexAlt());
 					}
 					if (elements.isEmpty())
 						listener.loaded(null, new Result(new NoSuchListException(anime, page)));
@@ -141,7 +145,7 @@ class Server {
 
 	static void getPosterUrl(Anime anime, PosterListener listener) {
 		try {
-			listener.loaded(anime.getDoc().select(anime.source.posterRegex()).first().attr("src"), new Result());
+			listener.loaded(anime.getDoc().select(anime.source.getPosterRegex()).first().attr("src"), new Result());
 		} catch (IOException e) {
 			listener.loaded(null, new Result(e));
 		}
@@ -149,8 +153,7 @@ class Server {
 
 	static String generateVideoUrl(Episode episode) throws IOException {
 		Document doc = Jsoup.connect(episode.episodeUrl).get();
-//		Document doc = Jsoup.parse(new URL(episode.episodeUrl), 60000);
-		Pattern pattern = Pattern.compile(episode.source.vidRegex());
+		Pattern pattern = Pattern.compile(episode.source.getVidRegex());
 		Matcher matcher = pattern.matcher(doc.data());
 		if (matcher.find())
 			return matcher.group();
@@ -164,12 +167,12 @@ class Server {
 	}
 
 	private static AnimeList generateAnimeList(Source source, Elements elements) {
-		List<Anime> list = new ArrayList<Anime>();
+		List<Anime> list = new ArrayList<>();
 		elements.forEach(element -> list.add(new Anime(source, element)));
 		return new AnimeList(source, Collections.unmodifiableList(list));
 	}
 
 	public static String getName(Anime anime) throws IOException {
-		return anime.getDoc().select(anime.source.nameRegex()).text();
+		return anime.getDoc().select(anime.source.getNameRegex()).text();
 	}
 }

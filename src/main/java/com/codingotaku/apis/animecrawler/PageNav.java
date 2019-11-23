@@ -15,7 +15,7 @@ public class PageNav {
 		this.current = builder.current;
 		this.last = builder.last;
 		this.lastAltr = builder.lastAltr;
-	};
+	}
 
 	public static class Builder {
 		String pageRegex;

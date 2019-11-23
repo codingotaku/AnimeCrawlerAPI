@@ -97,7 +97,7 @@ public class Source {
 			source.nameRegex = this.nameRegex;
 			source.multiPage = this.multiPage;
 			source.multiEpList = this.multiEpList;
-			source.pagePattern = this.pagePattern;
+			source.pageNav = this.pagePattern;
 			source.appendDomain = this.appendDomain;
 			source.domain = this.domain;
 			return source;
@@ -115,51 +115,47 @@ public class Source {
 	private String nameRegex;
 	private boolean multiPage;
 	private boolean multiEpList;
-	private PageNav pagePattern;
+	private PageNav pageNav;
 	private boolean appendDomain;
 	private String domain;
 
-	public Source() {
-		vidRegex = "(http[s]?:\\/\\/[^\\/]*.*.mp4\\\\??[^\\\"\\']*)";
-		epRegexAlt = null;
-		multiPage = false;
-		multiEpList = false;
-		pagePattern = null;
+	private Source() {
+
 	}
 
-	public PageNav pageNav() {
-		return pagePattern;
+	public PageNav getPageNav() {
+		return pageNav;
 	}
 
-	public String docRegex() {
+	public String getDocRegex() {
 		return docRegex;
 	}
 
-	public String epRegex() {
+	public String getEpRegex() {
 		return epRegex;
 	}
 
-	public String epRegexAlt() {
+	public String getEpRegexAlt() {
 		return epRegexAlt;
 	}
 
-	public String listRegex() {
+	public String getListRegex() {
 		return listRegex;
 	}
 
-	public String listUrl() {
+	public String getListUrl() {
 		return listUrl;
 	}
 
-	public String posterRegex() {
+	public String getPosterRegex() {
 		return posterRegex;
 	}
 
-	public String vidRegex() {
+	public String getVidRegex() {
 		return vidRegex;
 	}
 
-	public String nameRegex() {
+	public String getNameRegex() {
 		return this.nameRegex;
 	}
 
