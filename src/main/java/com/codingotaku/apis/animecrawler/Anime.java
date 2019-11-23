@@ -17,7 +17,8 @@ public class Anime {
 	Document doc = null;
 	private String name;
 	private String errorMessage = "Anime provided is null";
-
+	Anime(){
+	}
 	Anime(Source source, Element element) {
 		this.source = source;
 		name = element.text();
