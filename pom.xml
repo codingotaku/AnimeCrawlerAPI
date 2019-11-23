@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.codingotaku.api</groupId>
 	<artifactId>anime-crawler-api</artifactId>
-	<version>0.3</version>
+	<version>0.4</version>
 	<name>AnimeCrawlerAPI</name>
 	<description>Anime crawler API with multiple server support</description>
 	<properties>
