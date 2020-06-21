@@ -31,7 +31,7 @@ public class Episode {
 
 	public String getVideoUrl() throws IOException {
 		if (videoUrl == null) {
-			videoUrl = Server.generateVideoUrl(this);
+			videoUrl = Server.getInstance().generateVideoUrl(this);
 		}
 		return videoUrl;
 	}

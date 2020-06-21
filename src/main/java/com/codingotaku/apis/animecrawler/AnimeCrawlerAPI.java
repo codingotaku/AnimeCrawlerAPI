@@ -6,41 +6,45 @@ import com.codingotaku.apis.animecrawler.callbacks.PosterListener;
 import com.codingotaku.apis.animecrawler.callbacks.SynopsisListener;
 import com.codingotaku.apis.animecrawler.helpers.Preconditions;
 
-
 public class AnimeCrawlerAPI {
-	private String errorMessage =  "Anime provided is null";
+	private String errorMessage = "Anime provided is null";
+	private Server server;
+
+	public AnimeCrawlerAPI() {
+		server = Server.getInstance();
+	}
 
 	public void listAllAnime(Source source, AnimeFetchListener listener) {
 		Preconditions.checkNotNull(source, "Source provided is null");
 		Preconditions.checkNotNull(listener, "Listener provided is null");
-		Server.listAllAnime(source, listener);
+		server.listAllAnime(source, listener);
 	}
 
-	public void listAnime(Source source, int page, AnimeFetchListener listener){
+	public void listAnime(Source source, int page, AnimeFetchListener listener) {
 		Preconditions.checkNotNull(source, "Source provided is null");
 		Preconditions.checkArgument(page >= 0, String.format("Invalid page number %d", page));
 		Preconditions.checkNotNull(listener, "Listener provided is null");
-		Server.listAnime(source, page, listener);
+		server.listAnime(source, page, listener);
 	}
 
-	public void getSynopsys(Anime anime, SynopsisListener listener){
+	public void getSynopsys(Anime anime, SynopsisListener listener) {
 		Preconditions.checkNotNull(anime, errorMessage);
-		Server.getSynopsis(anime, listener);
+		server.getSynopsis(anime, listener);
 	}
 
-	public void listAllEpisodes(Anime anime, EpisodeListListener listener){
+	public void listAllEpisodes(Anime anime, EpisodeListListener listener) {
 		Preconditions.checkNotNull(anime, errorMessage);
-		Server.listAllEpisodes(anime, listener);
+		server.listAllEpisodes(anime, listener);
 	}
 
-	public void listEpisodes(Anime anime, int page, EpisodeListListener listener){
+	public void listEpisodes(Anime anime, int page, EpisodeListListener listener) {
 		Preconditions.checkNotNull(anime, errorMessage);
 		Preconditions.checkArgument(page >= 0, String.format("Invalid page number %d", page));
-		Server.listEpisodes(anime, page, listener);
+		server.listEpisodes(anime, page, listener);
 	}
 
-	public void getPosterUrl(Anime anime, PosterListener listener){
+	public void getPosterUrl(Anime anime, PosterListener listener) {
 		Preconditions.checkNotNull(anime, errorMessage);
-		Server.getPosterUrl(anime, listener);
+		server.getPosterUrl(anime, listener);
 	}
 }

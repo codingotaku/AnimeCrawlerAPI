@@ -17,7 +17,7 @@ public class AnimeList {
 	}
 
 	public void getNextPage(AnimeFetchListener listener) {
-		Server.listAnime(source, page + 1, listener);
+		Server.getInstance().listAnime(source, page + 1, listener);
 	}
 
 	public List<Anime> getAnimes() {

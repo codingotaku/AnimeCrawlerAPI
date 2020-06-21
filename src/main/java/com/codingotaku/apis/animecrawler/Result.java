@@ -7,7 +7,7 @@ public class Result {
 	Result() {
 		status = Status.OK;
 	}
-	
+
 	Result(Exception e) {
 		this.error = e;
 		status = e == null ? Status.OK : Status.ERROR;

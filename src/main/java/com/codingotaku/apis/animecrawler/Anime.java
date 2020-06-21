@@ -17,8 +17,12 @@ public class Anime {
 	Document doc = null;
 	private String name;
 	private String errorMessage = "Anime provided is null";
-	Anime(){
+	private Server server;
+
+	Anime() {
+		server = Server.getInstance();
 	}
+
 	Anime(Source source, Element element) {
 		this.source = source;
 		name = element.text();
@@ -27,9 +31,11 @@ public class Anime {
 			url = source.getDomain() + url;
 		}
 	}
+
 	public Source getSource() {
 		return this.source;
 	}
+
 	public String getUrl() {
 		return url;
 	}
@@ -42,23 +48,23 @@ public class Anime {
 
 	public void getSynopsis(SynopsisListener listener) {
 		Preconditions.checkNotNull(this, errorMessage);
-		Server.getSynopsis(this, listener);
+		server.getSynopsis(this, listener);
 	}
 
 	public void listAllEpisodes(EpisodeListListener listener) {
 		Preconditions.checkNotNull(this, errorMessage);
-		Server.listAllEpisodes(this, listener);
+		server.listAllEpisodes(this, listener);
 	}
 
 	public void listEpisodes(int page, EpisodeListListener listener) {
 		Preconditions.checkNotNull(this, errorMessage);
 		Preconditions.checkArgument(page >= 0, String.format("Invalid page number %d", page));
-		Server.listEpisodes(this, page, listener);
+		server.listEpisodes(this, page, listener);
 	}
 
 	public void getPosterUrl(PosterListener listener) {
 		Preconditions.checkNotNull(this, errorMessage);
-		Server.getPosterUrl(this, listener);
+		server.getPosterUrl(this, listener);
 	}
 
 	public String getName() {
@@ -66,13 +72,14 @@ public class Anime {
 			return name;
 		Preconditions.checkNotNull(this, errorMessage);
 		try {
-			return Server.getName(this);
+			return server.getName(this);
 		} catch (IOException e) {
 			return "none";
 		}
 	}
 
-	@Override public String toString() {
+	@Override
+	public String toString() {
 		return this.getName();
 	}
 }
